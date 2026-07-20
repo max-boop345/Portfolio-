@@ -1,24 +1,33 @@
+// ===== Main JavaScript =====
+
+// ===== Loading Screen =====
+window.addEventListener('load', () => {
+    const loader = document.querySelector('.loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            // Initialize animations
+            initScrollAnimations();
+            
+            // Initialize typed text
+            initTypedText();
+        }, 1500);
+    }
+});
+
+// Prevent scrolling while loading
+document.body.style.overflow = 'hidden';
+
 // ===== Mobile Navigation Toggle =====
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
 if (hamburger && navLinks) {
     hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
         hamburger.classList.toggle('active');
-    });
-}
-
-// ===== Navbar Scroll Effect =====
-const navbar = document.querySelector('.navbar');
-
-if (navbar) {
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+        navLinks.classList.toggle('active');
     });
 }
 
@@ -34,6 +43,19 @@ navLinksAll.forEach(link => {
     });
 });
 
+// ===== Navbar Scroll Effect =====
+const navbar = document.querySelector('.navbar');
+
+if (navbar) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+}
+
 // ===== Smooth Scroll for Anchor Links =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -43,14 +65,59 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
-            targetElement.scrollIntoView({
+            const navHeight = navbar ? navbar.offsetHeight : 0;
+            const targetPosition = targetElement.offsetTop - navHeight;
+            
+            window.scrollTo({
+                top: targetPosition,
                 behavior: 'smooth'
             });
         }
     });
 });
 
-// ===== Form Submission (Placeholder) =====
+// ===== Typed.js Animation =====
+function initTypedText() {
+    const typedElement = document.querySelector('.typed-text');
+    if (!typedElement) return;
+    
+    const typed = new Typed(typedElement, {
+        strings: [
+            'Civil Engineering Student',
+            'MMC & Numerical Simulation Enthusiast',
+            'Future Structural Analysis Engineer'
+        ],
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true,
+        loopCount: Infinity,
+        showCursor: true,
+        cursorChar: '|',
+        autoInsertCss: true
+    });
+}
+
+// ===== Scroll Animations =====
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('[data-aos]');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('aos-animate');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// ===== Form Submission =====
 const contactForm = document.getElementById('contact-form');
 
 if (contactForm) {
@@ -60,58 +127,6 @@ if (contactForm) {
     });
 }
 
-// ===== Initialize Dijkstra and Ants on Projects Page =====
-if (window.location.pathname.includes('projects.html') || 
-    window.location.pathname.endsWith('projects.html') ||
-    window.location.pathname === '/') {
-    
-    // Initialize Dijkstra's visualizer
-    if (typeof initDijkstra === 'function') {
-        initDijkstra();
-    }
-    
-    // Initialize Ant Colony simulation
-    if (typeof setupAnts === 'function') {
-        // We'll call this from the ants.js script
-    }
-}
-
-// ===== Lazy Loading for Images =====
-if ('IntersectionObserver' in window) {
-    const lazyImages = document.querySelectorAll('img[data-src]');
-    
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-            }
-        });
-    });
-    
-    lazyImages.forEach(img => {
-        imageObserver.observe(img);
-    });
-}
-
-// ===== Add Loading Animation for Interactive Demos =====
-const demoContainers = document.querySelectorAll('.interactive-demo');
-
-demoContainers.forEach(container => {
-    const canvas = container.querySelector('canvas');
-    if (canvas) {
-        canvas.style.opacity = '0';
-        canvas.style.transition = 'opacity 0.5s ease';
-        
-        // Show canvas when the demo is ready
-        setTimeout(() => {
-            canvas.style.opacity = '1';
-        }, 100);
-    }
-});
-
 // ===== Console Easter Egg =====
 console.log('%c🚀 Maxime Novo Frelicot Portfolio', 'color: #2563EB; font-size: 20px; font-weight: bold;');
-console.log('%cPassionate about MMC, Numerical Simulation, and AI in Engineering!', 'color: #10B981; font-size: 14px;');
+console.log('%cPassionate about MMC, Numerical Simulation, and Structural Analysis!', 'color: #10B981; font-size: 14px;');
