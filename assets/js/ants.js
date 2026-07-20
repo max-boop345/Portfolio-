@@ -1,23 +1,22 @@
 // ===== Ant Colony Optimization Simulation =====
 
 // Canvas setup
-let antsCanvas;
-let antsCtx;
+let antsCanvas, antsCtx;
 
 // Simulation parameters
-const NUM_ANTS = 20;
+const NUM_ANTS = 25;
 const PHEROMONE_EVAPORATION = 0.95;
-const PHEROMONE_DEPOSIT = 0.1;
+const PHEROMONE_DEPOSIT = 0.15;
 const ANT_SPEED = 2;
-const GRID_SIZE = 20;
+const GRID_SIZE = 15;
 
 // World dimensions
-let worldWidth = 600;
-let worldHeight = 400;
+let worldWidth = 800;
+let worldHeight = 500;
 
 // Nest and food positions
-let nest = { x: 100, y: 200 };
-let food = { x: 500, y: 200 };
+let nest = { x: 100, y: 250 };
+let food = { x: 700, y: 250 };
 
 // Pheromone grid
 let pheromones = [];
@@ -35,21 +34,25 @@ let lastTime = 0;
 // ===== Ant Class =====
 class Ant {
     constructor() {
-        this.x = nest.x;
-        this.y = nest.y;
-        this.target = food; // Start by going to food
+        this.reset();
+    }
+    
+    reset() {
+        this.x = nest.x + (Math.random() - 0.5) * 20;
+        this.y = nest.y + (Math.random() - 0.5) * 20;
+        this.target = food;
         this.path = [];
         this.carriesFood = false;
         this.direction = Math.random() * Math.PI * 2;
     }
     
-    update(pheromones) {
+    update() {
         // Simple movement: move towards target with some randomness
         const dx = this.target.x - this.x;
         const dy = this.target.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 5) {
+        if (distance < 10) {
             // Reached target
             if (this.target === food) {
                 this.carriesFood = true;
@@ -60,20 +63,23 @@ class Ant {
             }
             this.path = [];
         } else {
-            // Move towards target
-            this.x += (dx / distance) * ANT_SPEED;
-            this.y += (dy / distance) * ANT_SPEED;
+            // Move towards target with some randomness
+            const angle = Math.atan2(dy, dx);
+            const randomAngle = angle + (Math.random() - 0.5) * 0.5; // Add some randomness
+            
+            this.x += Math.cos(randomAngle) * ANT_SPEED;
+            this.y += Math.sin(randomAngle) * ANT_SPEED;
             
             // Add current position to path
             this.path.push({ x: this.x, y: this.y });
             
             // Limit path length
-            if (this.path.length > 50) {
+            if (this.path.length > 30) {
                 this.path.shift();
             }
             
             // Deposit pheromones along the path
-            if (this.path.length > 0 && Math.random() < 0.1) {
+            if (this.path.length > 0 && Math.random() < 0.15) {
                 const pathIndex = Math.floor(Math.random() * this.path.length);
                 const pos = this.path[pathIndex];
                 const gridX = Math.floor(pos.x / GRID_SIZE);
@@ -93,10 +99,14 @@ class Ant {
             
             if (obsDistance < obs.radius + 10) {
                 // Push ant away from obstacle
-                this.x += (obsDx / obsDistance) * 2;
-                this.y += (obsDy / obsDistance) * 2;
+                this.x += (obsDx / obsDistance) * 3;
+                this.y += (obsDy / obsDistance) * 3;
             }
         }
+        
+        // Keep ant within bounds
+        this.x = Math.max(0, Math.min(worldWidth, this.x));
+        this.y = Math.max(0, Math.min(worldHeight, this.y));
     }
     
     draw() {
@@ -145,8 +155,8 @@ function initAnts() {
 // ===== Initialize Obstacles =====
 function initObstacles() {
     obstacles = [
-        { x: 300, y: 100, radius: 30 },
-        { x: 300, y: 300, radius: 30 }
+        { x: 400, y: 150, radius: 40 },
+        { x: 400, y: 350, radius: 40 }
     ];
 }
 
@@ -159,7 +169,7 @@ function drawPheromones() {
         for (let j = 0; j < rows; j++) {
             const value = pheromones[i][j];
             if (value > 0) {
-                const alpha = Math.min(value * 0.2, 0.8);
+                const alpha = Math.min(value * 0.3, 0.8);
                 antsCtx.fillStyle = `rgba(16, 185, 129, ${alpha})`;
                 antsCtx.beginPath();
                 antsCtx.arc(
@@ -177,23 +187,28 @@ function drawPheromones() {
 
 // ===== Draw Obstacles =====
 function drawObstacles() {
-    antsCtx.fillStyle = '#374151';
+    antsCtx.fillStyle = '#2D3748';
     for (const obs of obstacles) {
         antsCtx.beginPath();
         antsCtx.arc(obs.x, obs.y, obs.radius, 0, Math.PI * 2);
         antsCtx.fill();
+        
+        // Draw border
+        antsCtx.strokeStyle = '#4A5568';
+        antsCtx.lineWidth = 2;
+        antsCtx.stroke();
     }
 }
 
 // ===== Draw Nest and Food =====
 function drawNestAndFood() {
     // Nest
-    antsCtx.fillStyle = '#6B7280';
+    antsCtx.fillStyle = '#4A5568';
     antsCtx.beginPath();
-    antsCtx.arc(nest.x, nest.y, 15, 0, Math.PI * 2);
+    antsCtx.arc(nest.x, nest.y, 20, 0, Math.PI * 2);
     antsCtx.fill();
     antsCtx.fillStyle = '#FFFFFF';
-    antsCtx.font = '12px Inter';
+    antsCtx.font = '14px Montserrat';
     antsCtx.textAlign = 'center';
     antsCtx.textBaseline = 'middle';
     antsCtx.fillText('Nest', nest.x, nest.y);
@@ -201,10 +216,10 @@ function drawNestAndFood() {
     // Food
     antsCtx.fillStyle = '#F59E0B';
     antsCtx.beginPath();
-    antsCtx.arc(food.x, food.y, 15, 0, Math.PI * 2);
+    antsCtx.arc(food.x, food.y, 20, 0, Math.PI * 2);
     antsCtx.fill();
     antsCtx.fillStyle = '#FFFFFF';
-    antsCtx.font = '12px Inter';
+    antsCtx.font = '14px Montserrat';
     antsCtx.textAlign = 'center';
     antsCtx.textBaseline = 'middle';
     antsCtx.fillText('Food', food.x, food.y);
@@ -222,7 +237,8 @@ function animateAnts(timestamp) {
     lastTime = timestamp;
     
     // Clear canvas
-    antsCtx.clearRect(0, 0, worldWidth, worldHeight);
+    antsCtx.fillStyle = '#1E1E1E';
+    antsCtx.fillRect(0, 0, worldWidth, worldHeight);
     
     // Update and draw
     drawPheromones();
@@ -231,7 +247,7 @@ function animateAnts(timestamp) {
     
     // Update ants
     for (const ant of ants) {
-        ant.update(pheromones);
+        ant.update();
     }
     
     // Draw ants
@@ -257,7 +273,7 @@ function animateAnts(timestamp) {
 
 // ===== Setup Function =====
 function setupAnts() {
-    // Get canvas
+    // Get canvas container
     const container = document.getElementById('ants-canvas');
     if (!container) {
         console.warn('Ants canvas container not found.');
@@ -267,7 +283,7 @@ function setupAnts() {
     // Create canvas
     antsCanvas = document.createElement('canvas');
     antsCanvas.width = container.clientWidth;
-    antsCanvas.height = 400;
+    antsCanvas.height = 500;
     container.appendChild(antsCanvas);
     antsCtx = antsCanvas.getContext('2d');
     
@@ -293,7 +309,8 @@ function resetAnts() {
     isRunning = false;
     
     // Clear canvas
-    antsCtx.clearRect(0, 0, worldWidth, worldHeight);
+    antsCtx.fillStyle = '#1E1E1E';
+    antsCtx.fillRect(0, 0, worldWidth, worldHeight);
     
     // Reinitialize
     initPheromones();
@@ -312,13 +329,14 @@ function handleAntsResize() {
     const container = document.getElementById('ants-canvas');
     if (container) {
         antsCanvas.width = container.clientWidth;
-        antsCanvas.height = 400;
+        antsCanvas.height = 500;
         worldWidth = antsCanvas.width;
         worldHeight = antsCanvas.height;
         
         // Redraw
         if (!isRunning) {
-            antsCtx.clearRect(0, 0, worldWidth, worldHeight);
+            antsCtx.fillStyle = '#1E1E1E';
+            antsCtx.fillRect(0, 0, worldWidth, worldHeight);
             drawPheromones();
             drawObstacles();
             drawNestAndFood();

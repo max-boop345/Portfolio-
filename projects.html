@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects | Maxime Novo Frelicot</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -15,9 +16,9 @@
             <a href="index.html" class="logo">MNF</a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="projects.html" class="active">Projects</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="#" class="active">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -27,154 +28,95 @@
         </div>
     </nav>
 
-    <!-- Projects Section -->
-    <section class="projects">
+    <!-- Page Header -->
+    <section class="page-header">
         <div class="container">
-            <h1>My Projects</h1>
-            <p class="intro">
-                Here are some of the projects I've worked on, ranging from <strong>numerical simulations</strong> to 
-                <strong>algorithmic visualizations</strong>.
-            </p>
+            <h1>Projects</h1>
+            <p>Explore my work in numerical simulation, algorithms, and engineering.</p>
+        </div>
+    </section>
 
-            <!-- Project 1: Bowling Ball -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🎳</div>
-                    <div class="project-title">
-                        <h2>Bowling Ball Trajectory Simulation</h2>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">NumPy</span>
-                            <span class="tag">Matplotlib</span>
-                        </div>
+    <!-- Dijkstra's Algorithm Section -->
+    <section id="dijkstra" class="demo-section section">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-subtitle">Interactive Demo</p>
+                <h2 class="section-title">Dijkstra's Algorithm Visualizer</h2>
+            </div>
+            <div class="demo-content">
+                <div class="demo-description">
+                    <p>
+                        This interactive tool allows you to visualize <strong>Dijkstra's shortest path algorithm</strong> in action. 
+                        Add nodes and edges to the graph, then run the algorithm to see how it finds the optimal path.
+                    </p>
+                    <ul>
+                        <li><strong>Click anywhere</strong> to add a node.</li>
+                        <li><strong>Click on a node</strong>, then click another node to add an edge.</li>
+                        <li><strong>Click "Run Dijkstra"</strong> to start the algorithm.</li>
+                        <li>Watch as the algorithm explores the graph and finds the shortest path!</li>
+                    </ul>
+                    <div class="demo-stats">
+                        <p><strong>Time Complexity:</strong> O(E + V log V)</p>
+                        <p><strong>Space Complexity:</strong> O(V)</p>
                     </div>
                 </div>
-                <p class="project-description">
-                    Numerical simulation of a bowling ball’s motion, accounting for <strong>friction, spin, and lane interactions</strong>. 
-                    The equations of motion were solved using Euler integration, and the results were visualized to 
-                    analyze the ball's trajectory under different initial conditions.
-                </p>
-                <div class="project-visual">
-                    <img src="assets/images/bowling_placeholder.png" alt="Bowling Ball Trajectory" onerror="this.src='https://via.placeholder.com/600x400?text=Bowling+Ball+Trajectory'">
+                <div class="demo-canvas">
+                    <div class="demo-controls">
+                        <button onclick="initDijkstra()" class="btn btn-outline"><i class="fas fa-redo"></i> Reset</button>
+                        <button onclick="addNodeDijkstra()" class="btn btn-outline"><i class="fas fa-plus"></i> Add Node</button>
+                        <button onclick="addEdgeDijkstra()" class="btn btn-outline"><i class="fas fa-link"></i> Add Edge</button>
+                        <button onclick="runDijkstra()" class="btn btn-primary"><i class="fas fa-play"></i> Run Dijkstra</button>
+                    </div>
+                    <canvas id="dijkstra-canvas" width="800" height="500"></canvas>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Project 2: Lunar Space Elevator -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🌕</div>
-                    <div class="project-title">
-                        <h2>Lunar Space Elevator Simulation</h2>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">SciPy</span>
-                            <span class="tag">Matplotlib</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="project-description">
-                    Modeled the <strong>dynamics of a space elevator on the Moon</strong>, considering cable tension, 
-                    centrifugal force, and gravitational pull. The simulation compared the feasibility of a lunar 
-                    elevator with Earth-based designs, highlighting the reduced material constraints due to the 
-                    Moon's lower gravity.
-                </p>
-                <div class="project-visual">
-                    <img src="assets/images/elevator_placeholder.png" alt="Lunar Space Elevator" onerror="this.src='https://via.placeholder.com/600x400?text=Lunar+Space+Elevator'">
-                </div>
+    <!-- Ant Colony Section -->
+    <section id="ants" class="demo-section section">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-subtitle">Interactive Demo</p>
+                <h2 class="section-title">Ant Colony Optimization</h2>
             </div>
-
-            <!-- Project 3: Rocket Trajectory -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🚀</div>
-                    <div class="project-title">
-                        <h2>Rocket Trajectory in Earth-Moon System</h2>
-                        <div class="project-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">NumPy</span>
-                            <span class="tag">Matplotlib</span>
-                        </div>
+            <div class="demo-content">
+                <div class="demo-description">
+                    <p>
+                        This simulation demonstrates <strong>Ant Colony Optimization</strong>, a metaheuristic algorithm 
+                        inspired by the foraging behavior of ants. Ants deposit pheromones as they move, and these pheromones 
+                        evaporate over time. The shortest path emerges as the most traveled route.
+                    </p>
+                    <ul>
+                        <li><strong>Blue ants</strong> are going to the food.</li>
+                        <li><strong>Red ants</strong> are returning to the nest with food.</li>
+                        <li><strong>Green trails</strong> represent pheromone concentrations.</li>
+                        <li>Obstacles (dark circles) force ants to find alternative paths.</li>
+                    </ul>
+                    <div class="demo-stats">
+                        <p><strong>Inspired by:</strong> Mines Informatiques 2025 subject</p>
+                        <p><strong>Algorithm:</strong> Pheromone-based pathfinding</p>
                     </div>
                 </div>
-                <p class="project-description">
-                    Simulated a <strong>rocket’s orbit in the Earth-Moon system</strong> with delta-V maneuvers to 
-                    adjust the trajectory. The simulation used n-body problem approximations to model the 
-                    gravitational interactions between the rocket, Earth, and Moon.
-                </p>
-                <div class="project-visual">
-                    <img src="assets/images/rocket_placeholder.png" alt="Rocket Trajectory" onerror="this.src='https://via.placeholder.com/600x400?text=Rocket+Trajectory'">
-                </div>
-            </div>
-
-            <!-- Project 4: Dijkstra's Algorithm -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🗺️</div>
-                    <div class="project-title">
-                        <h2>Dijkstra's Algorithm Visualizer</h2>
-                        <div class="project-tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">HTML5 Canvas</span>
-                            <span class="tag">Algorithms</span>
-                        </div>
+                <div class="demo-canvas">
+                    <div class="demo-controls">
+                        <button onclick="resetAnts()" class="btn btn-outline"><i class="fas fa-redo"></i> Reset Simulation</button>
                     </div>
-                </div>
-                <p class="project-description">
-                    An <strong>interactive tool</strong> to visualize Dijkstra’s shortest path algorithm. Users can add 
-                    nodes and edges, set weights, and watch the algorithm find the optimal path step-by-step. 
-                    Demonstrates the <strong>O(E + V log V)</strong> time complexity in action.
-                </p>
-                <div class="project-visual">
-                    <div class="interactive-demo" id="dijkstra-container">
-                        <div class="demo-controls">
-                            <button onclick="initDijkstra()" class="btn btn-small">Reset</button>
-                            <button onclick="addNodeDijkstra()" class="btn btn-small">Add Node</button>
-                            <button onclick="addEdgeDijkstra()" class="btn btn-small">Add Edge</button>
-                            <button onclick="runDijkstra()" class="btn btn-small btn-primary">Run Dijkstra</button>
-                        </div>
-                        <canvas id="dijkstra-canvas" width="600" height="400"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 5: Ant Colony Simulation -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon">🐜</div>
-                    <div class="project-title">
-                        <h2>Ant Colony Optimization</h2>
-                        <div class="project-tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">p5.js</span>
-                            <span class="tag">Algorithms</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="project-description">
-                    Simulation of <strong>ants finding the shortest path</strong> between food and nest using pheromone 
-                    trails. Inspired by the <strong>Mines Informatiques 2025 subject</strong>, this project demonstrates 
-                    emergent behavior from simple rules: ants deposit pheromones, which evaporate over time, leading 
-                    to the discovery of optimal paths.
-                </p>
-                <div class="project-visual">
-                    <div class="interactive-demo" id="ants-container">
-                        <div class="demo-controls">
-                            <button onclick="resetAnts()" class="btn btn-small">Reset</button>
-                        </div>
-                        <div id="ants-canvas"></div>
-                    </div>
+                    <div id="ants-canvas"></div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
             <p>&copy; 2025 Maxime Novo Frelicot. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#" class="social-link">GitHub</a>
-                <a href="#" class="social-link">LinkedIn</a>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#about">About</a>
+                <a href="#">Projects</a>
+                <a href="index.html#contact">Contact</a>
             </div>
         </div>
     </footer>

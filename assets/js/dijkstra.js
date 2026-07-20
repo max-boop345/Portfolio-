@@ -1,8 +1,7 @@
 // ===== Dijkstra's Algorithm Visualizer =====
 
 // Canvas and context
-const dijkstraCanvas = document.getElementById('dijkstra-canvas');
-const dijkstraCtx = dijkstraCanvas.getContext('2d');
+let dijkstraCanvas, dijkstraCtx;
 
 // Graph data
 let nodes = [];
@@ -15,14 +14,15 @@ let endNode = null;
 // Node and edge styles
 const NODE_RADIUS = 20;
 const NODE_COLOR = '#2563EB';
-const NODE_HOVER_COLOR = '#1D4ED8';
+const NODE_HOVER_COLOR = '#3B82F6';
 const NODE_START_COLOR = '#10B981';
 const NODE_END_COLOR = '#EF4444';
 const NODE_VISITED_COLOR = '#8B5CF6';
-const EDGE_COLOR = '#6B7280';
-const EDGE_WEIGHT_COLOR = '#374151';
+const EDGE_COLOR = '#4A5568';
+const EDGE_WEIGHT_COLOR = '#A0AEC0';
 const PATH_COLOR = '#F59E0B';
 const PATH_WIDTH = 4;
+const BG_COLOR = '#1E1E1E';
 
 // Animation state
 let isAnimating = false;
@@ -54,7 +54,7 @@ class Node {
         
         // Draw node ID
         dijkstraCtx.fillStyle = '#FFFFFF';
-        dijkstraCtx.font = '12px Inter';
+        dijkstraCtx.font = '12px Montserrat';
         dijkstraCtx.textAlign = 'center';
         dijkstraCtx.textBaseline = 'middle';
         dijkstraCtx.fillText(this.id, this.x, this.y);
@@ -93,7 +93,7 @@ class Edge {
         const midX = (this.node1.x + this.node2.x) / 2;
         const midY = (this.node1.y + this.node2.y) / 2;
         dijkstraCtx.fillStyle = EDGE_WEIGHT_COLOR;
-        dijkstraCtx.font = '12px Inter';
+        dijkstraCtx.font = '12px Montserrat';
         dijkstraCtx.textAlign = 'center';
         dijkstraCtx.textBaseline = 'middle';
         dijkstraCtx.fillText(this.weight.toString(), midX, midY);
@@ -162,7 +162,7 @@ function dijkstra(start, end) {
     const path = [];
     let current = end;
     while (current) {
-        path.unpush(current);
+        path.unshift(current);
         current = previous[current.id];
     }
     
@@ -189,7 +189,8 @@ function dijkstra(start, end) {
 // ===== Drawing Functions =====
 function drawGraph() {
     // Clear canvas
-    dijkstraCtx.clearRect(0, 0, dijkstraCanvas.width, dijkstraCanvas.height);
+    dijkstraCtx.fillStyle = BG_COLOR;
+    dijkstraCtx.fillRect(0, 0, dijkstraCanvas.width, dijkstraCanvas.height);
     
     // Draw edges
     edges.forEach(edge => {
@@ -219,7 +220,8 @@ function drawAnimationStep() {
     const step = animationQueue[animationIndex];
     
     // Clear canvas
-    dijkstraCtx.clearRect(0, 0, dijkstraCanvas.width, dijkstraCanvas.height);
+    dijkstraCtx.fillStyle = BG_COLOR;
+    dijkstraCtx.fillRect(0, 0, dijkstraCanvas.width, dijkstraCanvas.height);
     
     // Draw all edges
     edges.forEach(edge => {
@@ -239,23 +241,15 @@ function drawAnimationStep() {
     });
     
     // Draw current step info
+    dijkstraCtx.fillStyle = '#A0AEC0';
+    dijkstraCtx.font = '14px Montserrat';
+    dijkstraCtx.textAlign = 'center';
+    
     if (step.type === 'visit') {
-        const node = nodes.find(n => n.id === step.node);
-        if (node) {
-            dijkstraCtx.fillStyle = '#000000';
-            dijkstraCtx.font = '14px Inter';
-            dijkstraCtx.textAlign = 'center';
-            dijkstraCtx.fillText('Visiting node ' + step.node, dijkstraCanvas.width / 2, 20);
-        }
+        dijkstraCtx.fillText('Visiting node ' + step.node, dijkstraCanvas.width / 2, 20);
     } else if (step.type === 'update') {
-        dijkstraCtx.fillStyle = '#000000';
-        dijkstraCtx.font = '14px Inter';
-        dijkstraCtx.textAlign = 'center';
         dijkstraCtx.fillText('Updated distance to ' + step.node + ': ' + step.distance, dijkstraCanvas.width / 2, 20);
     } else if (step.type === 'path') {
-        dijkstraCtx.fillStyle = '#000000';
-        dijkstraCtx.font = '14px Inter';
-        dijkstraCtx.textAlign = 'center';
         dijkstraCtx.fillText('Shortest path found!', dijkstraCanvas.width / 2, 20);
     }
     
@@ -296,6 +290,14 @@ function handleCanvasClick(e) {
         const node = nodes.find(node => node.containsPoint(x, y));
         if (node) {
             selectedNode = node;
+            
+            // Set as start or end node
+            if (!startNode) {
+                startNode = node;
+            } else if (!endNode) {
+                endNode = node;
+            }
+            
             drawGraph();
         } else {
             // Add new node
@@ -325,11 +327,14 @@ function handleCanvasMove(e) {
 
 // ===== Public Functions =====
 function initDijkstra() {
+    dijkstraCanvas = document.getElementById('dijkstra-canvas');
     if (!dijkstraCanvas) return;
+    
+    dijkstraCtx = dijkstraCanvas.getContext('2d');
     
     // Set canvas size
     dijkstraCanvas.width = dijkstraCanvas.parentElement.clientWidth;
-    dijkstraCanvas.height = 400;
+    dijkstraCanvas.height = 500;
     
     // Add event listeners
     dijkstraCanvas.addEventListener('click', handleCanvasClick);
@@ -350,25 +355,32 @@ function initDijkstra() {
     const node1 = new Node(100, 100, 'A');
     const node2 = new Node(300, 100, 'B');
     const node3 = new Node(200, 300, 'C');
-    nodes.push(node1, node2, node3);
+    const node4 = new Node(400, 300, 'D');
+    nodes.push(node1, node2, node3, node4);
     
     // Add some default edges
     const edge1 = new Edge(node1, node2, 4);
     const edge2 = new Edge(node1, node3, 2);
     const edge3 = new Edge(node2, node3, 1);
-    edges.push(edge1, edge2, edge3);
+    const edge4 = new Edge(node2, node4, 5);
+    const edge5 = new Edge(node3, node4, 3);
+    edges.push(edge1, edge2, edge3, edge4, edge5);
     
     // Add connections
     node1.connections.push({ node: node2, weight: 4 });
     node1.connections.push({ node: node3, weight: 2 });
     node2.connections.push({ node: node1, weight: 4 });
     node2.connections.push({ node: node3, weight: 1 });
+    node2.connections.push({ node: node4, weight: 5 });
     node3.connections.push({ node: node1, weight: 2 });
     node3.connections.push({ node: node2, weight: 1 });
+    node3.connections.push({ node: node4, weight: 3 });
+    node4.connections.push({ node: node2, weight: 5 });
+    node4.connections.push({ node: node3, weight: 3 });
     
     // Set start and end nodes
     startNode = node1;
-    endNode = node3;
+    endNode = node4;
     
     // Draw initial graph
     drawGraph();
@@ -413,7 +425,7 @@ if (document.readyState === 'loading') {
 window.addEventListener('resize', () => {
     if (dijkstraCanvas) {
         dijkstraCanvas.width = dijkstraCanvas.parentElement.clientWidth;
-        dijkstraCanvas.height = 400;
+        dijkstraCanvas.height = 500;
         if (!isAnimating) {
             drawGraph();
         }
