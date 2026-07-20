@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxime Novo Frelicot | Portfolio</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">MNF</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Maxime Novo Frelicot</h1>
+                <p class="subtitle">Civil Engineering Student | Numerical Simulation & MMC Enthusiast</p>
+                <p class="description">
+                    Passionate about the <strong>Mechanics of Continuous Media (MMC)</strong> applied to bridges and buildings. 
+                    ENPC student with a strong background in MP* (Maths-Physics) and numerical simulation. 
+                    Currently on exchange at SJTU (Shanghai).
+                </p>
+                <div class="cta-buttons">
+                    <a href="projects.html" class="btn btn-primary">View Projects</a>
+                    <a href="about.html" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-3d" id="threejs-container"></div>
+        </div>
+    </section>
+
+    <!-- Projects Preview -->
+    <section class="preview">
+        <div class="container">
+            <h2>Featured Projects</h2>
+            <div class="preview-grid">
+                <div class="preview-card">
+                    <div class="card-icon">🎳</div>
+                    <h3>Bowling Ball Simulation</h3>
+                    <p>Numerical simulation of motion with friction and spin.</p>
+                </div>
+                <div class="preview-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Rocket Trajectory</h3>
+                    <p>Earth-Moon system with delta-V maneuvers.</p>
+                </div>
+                <div class="preview-card">
+                    <div class="card-icon">🐜</div>
+                    <h3>Ant Colony Simulation</h3>
+                    <p>Pheromone-based pathfinding algorithm.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Maxime Novo Frelicot. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link">GitHub</a>
+                <a href="#" class="social-link">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js Script -->
+    <script src="assets/js/threejs-bg.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
